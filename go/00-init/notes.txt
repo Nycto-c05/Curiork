@@ -1,0 +1,11 @@
+in Go, strings are in utf8 encoding, hence can take more than 8 bits-ASCII
+
+The len() repr the number of bytes in a string
+The string asciiStr := "Hello" is 5 bytes because each character in the string is an ASCII character, and each ASCII character is represented as 1 byte (8 bits) in memory.
+
+
+since utf supports char outside of utf8, hence can take up more bytes
+
+utf can take upto 4 bytes
+
+hence len(Γ) = 2
