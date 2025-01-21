@@ -29,12 +29,14 @@ func run(){
 		Cloneflags: syscall.CLONE_NEWUTS,
 	}
 
-  cmd.Run()
+  must(cmd.Run())
 
-  
 }
 
-func panic(msg string) {
-  fmt.Println(msg)
+func must(err error) {
+  if err != nil {
+    panic(err)
+  }
 }
+
 
