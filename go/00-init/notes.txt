@@ -9,3 +9,26 @@ since utf supports char outside of utf8, hence can take up more bytes
 utf can take upto 4 bytes
 
 hence len(Γ) = 2
+
+-- if var not initialized, it defaults to val eg int =0, float 0
+
+cap() ->gives capacity of data struct
+len() -> tells how much space has been occupied
+========
+
+In Go, a rune is just an alias for int32 that represents a Unicode code point.
+
+🔹 Why not just char?
+
+Go doesn’t have a char type.
+
+A "character" (what humans think of) can be 1–4 bytes in UTF-8.
+
+byte = 8-bit (uint8) → used for raw ASCII/UTF-8 bytes.
+
+rune = 32-bit (int32) → large enough to store any Unicode code point.
+
+=====
+
+str = ""
+str+=SliceStr[i] ---> this allocs a new string, instead use string build as show in png, strings are immut, so pushes to vector and then when done, pushes to string

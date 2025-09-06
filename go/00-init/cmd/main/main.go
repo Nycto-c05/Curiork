@@ -6,6 +6,8 @@ import (
 	"unicode/utf8"
 )
 
+var log = fmt.Println
+
 func basic() {
 	fmt.Println("Hello")
 
@@ -48,6 +50,7 @@ func div(numerator int, denom int) (int, int, error) {
 	}
 
 	res := numerator / denom
+	fmt.Printf("Result %v", res)
 	remain := numerator % denom
 	return res, remain, err
 }
@@ -59,15 +62,22 @@ func arrays() {
 	// declare n init , ... is for infer size
 	var arr = [...]int32{1, 2, 3}
 
-	fmt.Println(arr[:])
-	fmt.Println(&arr[1])
+	fmt.Println(arr[:])  //gives all elem, arr[inclusive:exclusive]
+	fmt.Println(&arr[1]) // gives address
 
 	var x []string = []string{"sfs"} // slice
 	fmt.Println(x)
+	slice := append(x, "xys")
+	log(slice)
 
-	var newSlice []string = make([]string, 0, 10)
+	//append using spread operator
+	newSliceAgain := append(x, slice...) //copy using spread operator
+	log(newSliceAgain)
+
+	var newSlice []string = make([]string, 4, 10) //len, capacity
 	//an empty slice with capacity 10
 	fmt.Println(newSlice)
+	log(len(newSlice)) //set len of 4 and capacity 10 (hence wont realloc unless reaches end of space)
 
 }
 
@@ -76,6 +86,10 @@ func slices() {
 	newSlice := make([]string, 2) //less space , hence will copy only 2 elements, when u append to slice, itll hv to find a new contig memory
 	copy(newSlice, mySlice)
 	fmt.Println(newSlice)
+}
+
+func strings() {
+
 }
 
 func main() {
@@ -95,5 +109,21 @@ func main() {
 	// arrays()
 
 	// slices()
+
+	// for loops-----------
+	i := 0
+	for {
+		if i > 10 {
+			break
+		}
+		if i == 4 {
+			log("Nice")
+		}
+		i++
+	}
+
+	for i := 0; i < 5; i++ {
+		// do somthing
+	}
 
 }
