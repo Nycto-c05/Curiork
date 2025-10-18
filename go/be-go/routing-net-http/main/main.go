@@ -34,7 +34,7 @@ func main() {
 		Handler: mux,
 	}
 
-	mux.HandleFunc("GET /users", api.getUsersHandler) // the handler dont have to be part of a struct/impl of Handler interface
+	mux.HandleFunc("GET /users", api.getUsersHandler) // the handler fn dont have to be part of a struct/impl of Handler interface
 	mux.HandleFunc("POST /users", api.createUserHandler)
 
 	log.Fatal(srv.ListenAndServe()) // instead of err := fn() if err!=nil
