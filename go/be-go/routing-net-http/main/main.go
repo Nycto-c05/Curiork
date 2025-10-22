@@ -38,4 +38,5 @@ func main() {
 	mux.HandleFunc("POST /users", api.createUserHandler)
 
 	log.Fatal(srv.ListenAndServe()) // instead of err := fn() if err!=nil
+	// http.ListenAndServe()
 }
