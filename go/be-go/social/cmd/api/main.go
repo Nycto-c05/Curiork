@@ -1,10 +1,18 @@
 package main
 
-import "log"
+import (
+	"log"
+
+	"github.com/Nycto-c05/social/internal/env"
+	"github.com/joho/godotenv"
+)
 
 func main() {
+
+	godotenv.Load()
+
 	cfg := config{
-		addr: ":8080",
+		addr: env.GetString("ADDR", ":8080"),
 	}
 	app := &application{
 		config: cfg,

@@ -52,12 +52,13 @@ func process(truck truckType) error {
 
 	err := truck.LoadCargo()
 	if err != nil {
-		fmt.Errorf("Error loading %w\n", err)
+		return fmt.Errorf("error loading %w\n", err)
 	}
 
 	err = truck.UnloadCargo()
 	if err != nil {
-		fmt.Errorf("Error unloading %w\n", err)
+		a := fmt.Errorf("error unloading %w\n", err)
+		return a
 	}
 
 	return nil
