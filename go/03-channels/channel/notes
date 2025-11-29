@@ -1,0 +1,6 @@
+c := make(chan int) -- wont work (will have to make it buffered by adding -> , size eg) make(chan int, 1)
+	c <- 1
+	i := <-c
+	fmt.Println(i)
+
+Sending on an unbuffered channel requires another goroutine to receive simultaneously.
