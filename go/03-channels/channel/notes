@@ -4,3 +4,8 @@ c := make(chan int) -- wont work (will have to make it buffered by adding -> , s
 	fmt.Println(i)
 
 Sending on an unbuffered channel requires another goroutine to receive simultaneously.
+
+note: c <- i and val <- c are sending and rec, and are both blocking 
+
+
+buffered channel dont need a receiving routine

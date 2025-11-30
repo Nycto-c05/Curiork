@@ -12,6 +12,8 @@ var wg = sync.WaitGroup{}
 func base() {
 	c := make(chan int, 2) //adding size 2 makes it buffered
 
+	// goroutine sends
+	//main goroutine receives
 	go func(i int) {
 		c <- i
 		c <- (i + 1)

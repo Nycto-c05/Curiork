@@ -7,6 +7,7 @@ import (
 )
 
 var wg sync.WaitGroup
+var print = fmt.Println
 
 func one() {
 	// wont work, unbuff need a receiving routine
@@ -56,8 +57,31 @@ func three() {
 
 }
 
+func four() {
+	c := make(chan int)
+	go func() {
+		defer close(c) // deadlock w/o this line
+		for i := 0; i < 5; i++ {
+			c <- i
+		}
+	}()
+
+	// val, ok := <-c
+	// if !ok {
+	// 	print("error")
+	// } else {
+	// 	print(val, "0th val")
+	// }
+	for i := range c {
+		print(i) //keeps waiting here even when obove routine has completed
+		//no one to send, so deadlock
+		//hence need the sending routine to close out and notify anyone using channel that no mo vals coming to channel from that routine
+
+	}
+}
 func main() {
 	// one()
 	// two()
-	three()
+	// three()
+	// four()
 }

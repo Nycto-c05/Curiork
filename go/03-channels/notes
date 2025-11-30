@@ -1,0 +1,9 @@
+Channels
+way to comm b/w routines
+  holds data 
+  thread safe (no data races)
+  listen for data
+
+when putting in channel, blocks code there unless someone pops it, hence deadlock
+
+
