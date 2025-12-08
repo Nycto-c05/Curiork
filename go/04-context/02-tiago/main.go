@@ -36,3 +36,7 @@ func one() {
 func main() {
 	one()
 }
+
+/*
+so when the context timeouts the done channel becomes ready to read ie is closes the done channel, and if it does not timeout, and i call cancel() then i force the done channel to become available to read by clsing it
+*/
