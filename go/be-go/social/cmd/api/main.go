@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/Nycto-c05/social/internal/env"
+	"github.com/Nycto-c05/social/internal/store"
 	"github.com/joho/godotenv"
 )
 
@@ -14,8 +15,12 @@ func main() {
 	cfg := config{
 		addr: env.GetString("ADDR", ":8080"),
 	}
+
+	store := store.NewStorage(nil)
+
 	app := &application{
 		config: cfg,
+		store:  store,
 	}
 
 	mux := app.mount()
