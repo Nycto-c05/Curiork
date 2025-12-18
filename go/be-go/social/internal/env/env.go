@@ -1,7 +1,6 @@
 package env
 
 import (
-	"fmt"
 	"os"
 	"strconv"
 )
@@ -16,16 +15,16 @@ func GetString(key, fallback string) string {
 }
 
 // better error handling
-func GetInt(key string, fallback int) (int, error) {
+func GetInt(key string, fallback int) int {
 	val, ok := os.LookupEnv(key)
 	if !ok {
-		return fallback, fmt.Errorf("env %s not set", key)
+		return fallback //, fmt.Errorf("env %s not set", key)
 	}
 
 	valAsInt, err := strconv.Atoi(val)
 	if err != nil {
-		return fallback, fmt.Errorf("env %s invalid int: %v", key, err)
+		return fallback //, fmt.Errorf("env %s invalid int: %v", key, err)
 	}
 
-	return valAsInt, nil
+	return valAsInt
 }
