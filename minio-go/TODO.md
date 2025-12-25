@@ -1,4 +1,4 @@
-- URL short (changes DB structure, adds Auto_incr ID used to encode and decode into base62) - this make UUID redundant (on low scale)
+- URL short (changes DB structure, adds Auto_incr ID used to encode and decode into base62) - this makes UUID redundant (on low scale)
 - Migrations ?
 - Cache (Recently pushed pastes cache for couple hours)?
 - Docker file for Backend on same network in compose

@@ -6,6 +6,7 @@ import (
 )
 
 type PasteMeta struct {
+	ID             string    `json:"id"`
 	UUID           string    `json:"uuid"`
 	IdempotencyKey string    `json:"idempotency_key"`
 	Filename       string    `json:"filename"`
@@ -15,6 +16,7 @@ type PasteMeta struct {
 
 type MetaRepository interface {
 	GetByIdempotencyKey(ctx context.Context, key string) (*PasteMeta, error)
+	GetbyID(ctx context.Context, id string) (*PasteMeta, error)
 	GetbyUUID(ctx context.Context, uuid string) (*PasteMeta, error)
 	Insert(ctx context.Context, meta *PasteMeta) error
 }

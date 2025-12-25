@@ -6,7 +6,6 @@ import (
 	"io"
 
 	minio "github.com/minio/minio-go/v7"
-	// credentials "github.com/minio/minio-go/v7/pkg/credentials"
 )
 
 type MinioStore struct {

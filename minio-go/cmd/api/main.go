@@ -14,6 +14,7 @@ func main() {
 	config := &config{
 		addr: ":8080",
 	}
+
 	//Initialize impl of repo and object stores
 	repo := repository.NewPostgresMetaRepository( /*db conn client*/ &sql.DB{})
 	objectStore := object.NewMinioStore(&minio.Client{}, "bucketNamePlaceholder")

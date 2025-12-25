@@ -22,6 +22,7 @@ func (r *PostgresMetaRepository) GetByIdempotencyKey(ctx context.Context, key st
 	paste := &PasteMeta{}
 
 	err := r.db.QueryRowContext(ctx, q, key).Scan(
+		&paste.ID,
 		&paste.UUID,
 		&paste.IdempotencyKey,
 		&paste.Filename,
@@ -39,15 +40,46 @@ func (r *PostgresMetaRepository) GetByIdempotencyKey(ctx context.Context, key st
 
 	return paste, nil
 }
+
+func (r *PostgresMetaRepository) GetbyID(ctx context.Context, id string) (*PasteMeta, error) {
+	const q = `
+		SELECT id, uuid, idempotency_key, filename, created_at, expires_at 
+		FROM paste_metadata 
+		WHERE id = $1;
+	`
+	paste := &PasteMeta{}
+
+	err := r.db.QueryRowContext(ctx, q, id).Scan(
+		&paste.ID,
+		&paste.UUID,
+		&paste.IdempotencyKey,
+		&paste.Filename,
+		&paste.CreatedAt,
+		&paste.ExpiresAt,
+	)
+
+	if err == sql.ErrNoRows {
+		return nil, nil
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	return paste, nil
+
+}
+
 func (r *PostgresMetaRepository) GetbyUUID(ctx context.Context, uuid string) (*PasteMeta, error) {
 	const q = `
-		SELECT uuid, idempotency_key, filename, created_at, expires_at 
+		SELECT id, uuid, idempotency_key, filename, created_at, expires_at 
 		FROM paste_metadata 
 		WHERE uuid = $1;
 	`
 	paste := &PasteMeta{}
 
 	err := r.db.QueryRowContext(ctx, q, uuid).Scan(
+		&paste.ID,
 		&paste.UUID,
 		&paste.IdempotencyKey,
 		&paste.Filename,
