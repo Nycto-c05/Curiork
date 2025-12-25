@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"minio-go-s3/internal/repository"
 	"net/http"
 	"time"
 
@@ -11,6 +12,7 @@ import (
 
 type application struct {
 	config config
+	repo   repository.MetaRepository
 }
 
 type config struct {
