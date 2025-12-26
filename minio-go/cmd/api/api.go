@@ -20,9 +20,22 @@ type application struct {
 type config struct {
 	addr string
 	db   dbConfig
+	blob blobConfig
 }
 
 type dbConfig struct {
+	addr         string
+	maxOpenConns int
+	maxIdleConns int
+	maxIdleTime  string
+}
+
+type blobConfig struct {
+	endpoint        string
+	accessKeyID     string
+	secretAccessKey string
+	bucket          string
+	useSSL          bool
 }
 
 // ---- application methods

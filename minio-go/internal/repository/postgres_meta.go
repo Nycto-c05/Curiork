@@ -98,7 +98,7 @@ func (r *PostgresMetaRepository) GetbyUUID(ctx context.Context, uuid string) (*P
 	return paste, nil
 
 }
-func (r *PostgresMetaRepository) Insert(ctx context.Context, meta *PasteMeta) error {
+func (r *PostgresMetaRepository) Insert(ctx context.Context, meta *PasteMeta) (*PasteMeta, error) {
 	const q = `
         INSERT INTO paste_metadata (
             uuid,
@@ -109,14 +109,25 @@ func (r *PostgresMetaRepository) Insert(ctx context.Context, meta *PasteMeta) er
         )
         VALUES ($1, $2, $3, $4, $5)
     `
-	_, err := r.db.ExecContext(ctx, q,
+	inserted := &PasteMeta{}
+
+	err := r.db.QueryRowContext(ctx, q,
 		meta.UUID,
 		meta.IdempotencyKey,
 		meta.Filename,
 		meta.CreatedAt,
 		meta.ExpiresAt,
+	).Scan(
+		&inserted.UUID,
+		&inserted.IdempotencyKey,
+		&inserted.Filename,
+		&inserted.CreatedAt,
+		&inserted.ExpiresAt,
 	)
 
-	return err
+	if err != nil {
+		return nil, err
+	}
 
+	return inserted, nil
 }

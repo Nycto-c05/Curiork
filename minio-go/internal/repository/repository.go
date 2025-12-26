@@ -18,5 +18,5 @@ type MetaRepository interface {
 	GetByIdempotencyKey(ctx context.Context, key string) (*PasteMeta, error)
 	GetbyID(ctx context.Context, id string) (*PasteMeta, error)
 	GetbyUUID(ctx context.Context, uuid string) (*PasteMeta, error)
-	Insert(ctx context.Context, meta *PasteMeta) error
+	Insert(ctx context.Context, meta *PasteMeta) (*PasteMeta, error)
 }
