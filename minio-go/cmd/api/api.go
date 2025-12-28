@@ -2,8 +2,7 @@ package main
 
 import (
 	"log"
-	"minio-go-s3/internal/repository"
-	object "minio-go-s3/internal/storage"
+	"minio-go-s3/internal/service"
 	"net/http"
 	"time"
 
@@ -12,15 +11,15 @@ import (
 )
 
 type application struct {
-	config config
-	repo   repository.MetaRepository
-	object object.ObjectStore
+	config   config
+	pasteSvc service.PasteService
 }
 
 type config struct {
-	addr string
-	db   dbConfig
-	blob blobConfig
+	addr    string
+	baseURL string
+	db      dbConfig
+	blob    blobConfig
 }
 
 type dbConfig struct {
@@ -49,6 +48,8 @@ func (app *application) mount() http.Handler {
 
 	r.Route("/v1", func(r chi.Router) {
 		r.Get("/health", app.healthCheckHandler)
+		r.Get("/pastes/{id}", app.GetPasteHandler)
+		r.Post("/pastes", app.CreatePasteHandler)
 	})
 
 	return r
