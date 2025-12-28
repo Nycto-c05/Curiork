@@ -9,3 +9,7 @@
 - [ ] Docker file for Backend on same network in compose
        
 - [x] Few MB limit to pastes -> `Handling on http handler boundary`
+
+- [] Create Cleaup cron job
+
+- [] FrontEnd (Ugh)
