@@ -28,6 +28,8 @@ type PasteService interface {
 		ctx context.Context,
 		id string,
 	) (*repository.PasteMeta, []byte, error)
+
+	DeletePaste(ctx context.Context, key string) error
 }
 
 type pasteService struct {
@@ -125,4 +127,16 @@ func (s *pasteService) GetPaste(
 	}
 
 	return meta, data, nil
+}
+
+func (s *pasteService) DeletePaste(ctx context.Context, id string) error {
+	if err := s.store.Delete(ctx, id); err != nil {
+		return err
+	}
+
+	if err := s.metaRepo.Delete(ctx, id); err != nil {
+		return err
+	}
+
+	return nil
 }

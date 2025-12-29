@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"minio-go-s3/internal/blob"
 	"minio-go-s3/internal/db"
@@ -8,6 +9,10 @@ import (
 	"minio-go-s3/internal/repository"
 	"minio-go-s3/internal/service"
 	"minio-go-s3/internal/storage"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 )
 
 func main() {
@@ -49,6 +54,7 @@ func main() {
 	repo := repository.NewPostgresMetaRepository(dbClient)
 	objectStore := storage.NewMinioStore(s3Client, config.blob.bucket)
 	idGen := idgen.NewIDGenerator()
+	gc := NewGarbageCollector(repo, objectStore, 24*time.Hour)
 
 	pasteSvc := service.NewPasteService(repo, objectStore, idGen)
 
@@ -56,9 +62,22 @@ func main() {
 	app := &application{
 		config:   *config,
 		pasteSvc: pasteSvc,
+		gc:       gc,
 	}
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	go app.gc.Start(ctx)
 
 	mux := app.mount()
 
 	log.Fatal(app.run(mux))
+
+	signalChan := make(chan os.Signal, 1)
+	signal.Notify(signalChan, syscall.SIGINT, syscall.SIGTERM)
+	<-signalChan
+	cancel()
+	log.Println("Shutting down...")
+
 }

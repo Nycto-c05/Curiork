@@ -13,6 +13,7 @@ import (
 type application struct {
 	config   config
 	pasteSvc service.PasteService
+	gc       *GarbageCollector
 }
 
 type config struct {

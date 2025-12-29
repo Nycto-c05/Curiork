@@ -18,4 +18,6 @@ type MetaRepository interface {
 	GetByIdempotencyKey(ctx context.Context, key string) (*PasteMeta, error)
 	GetByID(ctx context.Context, id string) (*PasteMeta, error)
 	Insert(ctx context.Context, meta *PasteMeta) (*PasteMeta, error)
+	ListExpired(ctx context.Context, now time.Time) ([]*PasteMeta, error)
+	Delete(ctx context.Context, id string) error
 }

@@ -10,6 +10,6 @@
        
 - [x] Few MB limit to pastes -> `Handling on http handler boundary`
 
-- [ ] Create Cleaup cron job
+- [x] Create Cleaup cron job / Garbage Collector
 
 - [ ] FrontEnd (Ugh)

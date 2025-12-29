@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"time"
 )
 
 type PostgresMetaRepository struct {
@@ -96,4 +97,71 @@ func (r *PostgresMetaRepository) Insert(ctx context.Context, meta *PasteMeta) (*
 	}
 
 	return inserted, nil
+}
+
+func (r *PostgresMetaRepository) ListExpired(
+	ctx context.Context,
+	now time.Time,
+) ([]*PasteMeta, error) {
+
+	const q = `
+		SELECT id, idempotency_key, filename, created_at, expires_at
+		FROM paste_metadata
+		WHERE expires_at <= $1;
+	`
+
+	rows, err := r.db.QueryContext(ctx, q, now)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var pastes []*PasteMeta
+
+	for rows.Next() {
+		p := &PasteMeta{}
+		if err := rows.Scan(
+			&p.ID,
+			&p.IdempotencyKey,
+			&p.Filename,
+			&p.CreatedAt,
+			&p.ExpiresAt,
+		); err != nil {
+			return nil, err
+		}
+		pastes = append(pastes, p)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return pastes, nil
+}
+
+func (r *PostgresMetaRepository) Delete(
+	ctx context.Context,
+	id string,
+) error {
+
+	const q = `
+		DELETE FROM paste_metadata
+		WHERE id = $1;
+	`
+
+	res, err := r.db.ExecContext(ctx, q, id)
+	if err != nil {
+		return err
+	}
+
+	rows, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rows == 0 {
+		return sql.ErrNoRows
+	}
+
+	return nil
 }
