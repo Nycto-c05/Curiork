@@ -1,0 +1,26 @@
+kind: DaemonSet
+apiVersion: apps/v1
+
+metadata:
+  name: nginx-daemonsets
+  namespace: nginx
+
+spec:
+  #replicas: 2 no need, puts a replica in each daemon
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      # name: nginx-dep-pod, no need, the replicaSet owns this pod anyway, hence random name 
+      labels:
+        app: nginx
+
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:latest 
+          ports:
+            - containerPort: 80
+
+

@@ -1,0 +1,109 @@
+-Create cluster
+  kind create cluster --name cluster-0 --config=config.yaml
+  kubectl cluster info
+  kubectl cluster-info --context kind-cluster-0 --> kind-<clusterName>
+  kubectl get nodes -<get nodes active>
+
+=====================================================
+### Namespace (Kubernetes) — Short Note
+
+A namespace is a logical partition inside a Kubernetes cluster used to organize and isolate workloads.
+Resources like sql, nginx and its Deployments, pod and Services can be namespaced
+
+What can be namespaced:
+
+ Pods
+ Deployments / ReplicaSets
+ Services
+ ConfigMaps
+ Secrets
+ Jobs / CronJobs
+
+(Not namespaced: Nodes, PersistentVolumes, StorageClasses, CRDs)
+
+Why namespaces are used:
+
+ Avoid name collisions (same app name in different namespaces)
+ Separate environments (dev / staging / prod)
+ Enforce access control with RBAC
+ Apply resource limits using quotas
+ Enable safe cleanup (delete a namespace → delete everything inside)
+
+> Namespaces isolate workloads and policies, not nodes or infrastructure.
+
+kubectl get namespace
+kubectl get pods -<lists pods in namespace, default ns by default>
+kubectl get pods -n kube-system -<pods are here
+
+kubectl get ns
+→ Lists all namespaces in the cluster.
+
+kubectl run nginx --image=nginx
+→ Creates and runs an nginx pod in the default namespace.
+
+kubectl get pods -n nginx
+→ Lists pods in the nginx namespace.
+
+kubectl get pods
+→ Lists pods in the default namespace.
+
+kubectl delete pod nginx
+→ Deletes the nginx pod from the default namespace.
+
+kubectl run nginx --image=nginx -n nginx
+→ Creates and runs an nginx pod in the nginx namespace.
+
+kubectl get pods
+→ Lists pods in the default namespace.
+
+kubectl get pods -n nginx
+→ Lists pods in the nginx namespace.
+
+kubectl delete pod nginx -n nginx
+→ Deletes the nginx pod from the nginx namespace.
+
+kubectl apply -f namespace.yml -<create and apply and create ns from manifest file>
+
+kctl describe pod/nginx-pod -n nginx
+
+=========================
+### DEPLOYEMENT - manager for replica sets
+
+A ReplicaSet makes sure N identical Pods are always running.-if pod dies, Creates, no rolling update, rollback or versioning (created and owned by Deployments)
+
+Labels (app: nginx) → tags put on the pods so Kubernetes can identify and group them.
+
+Selector (matchLabels: app: nginx) → tells the Deployment which pods it owns and manages by matching their labels.
+
+Template → the pod blueprint the ReplicaSet uses to create new pods when scaling or replacing failures.
+
+- k get deploy -n nginx
+-  k scale deployment/nginx-deployment -n nginx --replicas=3
+-  kubectl get pods -n nginx -o wide
+
+
+ROLLOUT: kubectl set image deployment/<deployment-name> -n <namespace> <container-name>=<new-image-name>:<tag> [options]
+
+  <deployment-name>: 
+      The name of the specific Deployment you want to modify (e.g., nginx-deployment).
+
+  <container-name>:
+      The name of the container within the Deployment's Pod template to update.
+
+  <new-image-name>:<tag>: 
+      The full name and tag of the new container image (e.g., nginx:1.23.1)
+
+Does a rolling update, old containers are still up while new ones spin up
+
+READ ABOUT ANNOTATIONS
+
+====================
+REPLICASET : cant rollout update, no down time, etc: 
+k get replicaset -n <namespace>
+
+===================
+
+DAEMONSETS: Ensures every worker node/selected worker has one replica
+no replica needed to be specified in manifest
+
+
