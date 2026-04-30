@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+echo 'export TERM=xterm-256color' >> ~/.bashrc
 
 echo "Updating system..."
 sudo apt update -y
